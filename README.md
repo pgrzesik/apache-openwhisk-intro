@@ -30,6 +30,35 @@ OpenWhisk do działania wykorzystuje technologie takie jak Nginx, CouchDB, Kafka
 
 ![elementy openwhisk](https://github.com/pgrzesik/apache-openwhisk-intro/blob/master/img/elementy_openwhisk.png)
 
-### 
+### Nginx
 
+API oferowane przez OpenWhisk'a jest w pełni oparte o HTTP, w związku z tym Nginx pełni rolę reverse proxy dla całego API, a także odpowiada za terminację SSL.
+Z racji tego, że jest on w pełni bezstanowy, jest łatwo skalowalnym elementem systemu.
 
+### Controller
+
+Po przejściu przez Nginx'a, request trafia do kontrolera, będącego centralną częścią systemu. Jest on odpowiedzialny za autoryzację oraz autentykację (w tym celu łączy się z CouchDB) oraz dalszą obsługę requestów trafiajacych do API.
+Controller został zaimplementowany w Scali.
+
+### CouchDB
+
+CouchDB przechowuje pełne dane na temat stanu systemu. Przechowywane w nim są zarówno credentiale, metadane, a także definicje akcji, triggerów oraz reguł.
+
+### Consul
+
+Consul wykorzystywany jest do service discovery w ramach OpenWhisk'a. Jest on odpytywany przez kontroler w celu ustalenia, które z Invoker'ów są dostępne do wykonania akcji.
+
+W połączeniu z Consul'em, wykorzystywany jest Registrator, którego zadaniem jest monitorowanie kontenerów Dockerowych oraz zapis tych danych w Consulu. 
+
+### Kafka
+
+Komunikacja między Invokerem a Controllerem odbywa się w całości przez Kafkę, która buforuje wiadomości wysyłane przez Controller. Kiedy wiadomość zostaje dostarczona, przez Contoller zwrócony zostaje ActivationId, który może następnie zostać wykorzystany do sprawdzenia rezultatu konkretnego wywołania.
+
+Do zarządzania oraz utrzymywania Kafki wykorzystywany jest Apache Zookeeper.
+
+### Invoker
+
+Podobnie jak Controller, Invoker został zaimplementowany w Scali. Jego głównym zadaniem jest wykonywanie akcji wywoływanych przez Controller, do czego wykorzystuje kontenery Dockerowe.
+Dla każdego wywołania, Invoker przygotowuje kontener w którym akcja zostanie wykonana, wstrzykuje do niego kod akcji, który następnie jest wykonywany z podanymi parametrami. Po zwróceniu rezultatu i zapisaniu go w CouchDB, kontener zostaje zniszczony.
+
+Możliwe jest również utrzymywanie "gorących" kontenerów, które pozwalają zaoszczędzić czas przy wielokrotnym wywoływaniu tych samych akcji.
