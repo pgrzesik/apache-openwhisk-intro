@@ -11,8 +11,15 @@ Rozwijany w ramach projektu "Incubator" Apache Software Foundation, OpenWhisk je
 
 ## Jak działa Apache OpenWhisk ?
 
-Diagram działania OpenWhisk:
+Główną ideą OpenWhisk'a jest wykonywanie odpowiednich akcji (actions), w odpowiedzi na zdarzenia (eventy).
 
 ![diagram OpenWhisk](https://github.com/apache/incubator-openwhisk/blob/master/docs/images/OpenWhisk.png)
 źródło: https://github.com/apache/incubator-openwhisk/blob/master/docs/images/OpenWhisk.png
+
+Akcje są to bezstanowe funkcje, napisane w języku takim jak Python, Swift, Javascript, mogą być również dowolnym programem spakowanym w kontener Docker'owy.
+Do zdarzeń w wyniku których wywoływane są akcje należeć mogą proste requesty HTTP, zmiany w bazie danych, upload pliku graficznego czy też pojawienie się nowego commitu w repozytorium.
+
+Zdarzenia te trafiają do odpowiednich triggerów, które następnie na podstawie reguł wywołują odpowiednie akcje. 
+
+()
 
