@@ -21,5 +21,15 @@ Do zdarzeń w wyniku których wywoływane są akcje należeć mogą proste reque
 
 Zdarzenia te trafiają do odpowiednich triggerów, które następnie na podstawie reguł wywołują odpowiednie akcje. 
 
-()
+![flow openwhisk](https://github.com/pgrzesik/apache-openwhisk-intro/blob/master/img/flow_openwhisk.png)
+
+
+## Elementy architektury Apache OpenWhisk
+
+OpenWhisk do działania wykorzystuje technologie takie jak Nginx, CouchDB, Kafka oraz Docker, przestawione poniżej.
+
+![elementy openwhisk](https://github.com/pgrzesik/apache-openwhisk-intro/blob/master/img/elementy_openwhisk.png)
+
+### 
+
 
