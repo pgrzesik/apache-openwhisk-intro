@@ -62,3 +62,24 @@ Podobnie jak Controller, Invoker został zaimplementowany w Scali. Jego główny
 Dla każdego wywołania, Invoker przygotowuje kontener w którym akcja zostanie wykonana, wstrzykuje do niego kod akcji, który następnie jest wykonywany z podanymi parametrami. Po zwróceniu rezultatu i zapisaniu go w CouchDB, kontener zostaje zniszczony.
 
 Możliwe jest również utrzymywanie "gorących" kontenerów, które pozwalają zaoszczędzić czas przy wielokrotnym wywoływaniu tych samych akcji.
+
+
+## OpenWhisk na e24cloud.com
+
+### Przygotowanie serwera
+
+Do przetestowania OpenWhisk'a w akcji, wykorzystałem serwer na e24cloud o następujących parametrach:
+
+Nazwa: openwhisk-serwer
+Rdzenie: 1
+Pamięć RAM: 2GB (Minimalna ilość RAMu na jakiej udało mi się pomyślnie uruchomić wszystkie komponenty OpenWhisk'a)
+Dysk: 40GB HDD
+OS: Ubuntu 14.04 (nic nie stoi na przeszkodzie by użyc innego systemu operacyjnego)
+
+Jako że był to mój pierwszy serwer na e24cloud, musiałem również wygenerować parę kluczy ssh.
+
+Po kilku sekundach od utworzenia serwera otrzymałem mailowo informację o tym, że mój serwer jest już gotowy do użytku, także nie pozostało nic innego niż zalogować się na niego i przystąpić do instalacji OpenWhisk'a.
+
+### Instalacja OpenWhisk
+
+TODO 
