@@ -2,8 +2,9 @@
 
 Artykuł ten powstał w ramach konkursu "KONKURS Z CHMURĄ - Pokaż jak używasz chmury" zorganizowanego przez chmurowisko.com.
 
-
 Konkurs: https://chmurowisko.pl/konkurs-z-chmura/
+
+W ramach projektu chciałbym przedstawić czym jest Apache OpenWhisk, jak działa, a także pokazać, że również na e24cloud możemy budować architekturę Serverless/FaaS.
 
 ## Czym jest Apache OpenWhisk?
 
@@ -70,11 +71,11 @@ Możliwe jest również utrzymywanie "gorących" kontenerów, które pozwalają
 
 Do przetestowania OpenWhisk'a w akcji, wykorzystałem serwer na e24cloud o następujących parametrach:
 
-Nazwa: openwhisk-serwer
-Rdzenie: 1
-Pamięć RAM: 2GB (Minimalna ilość RAMu na jakiej udało mi się pomyślnie uruchomić wszystkie komponenty OpenWhisk'a)
-Dysk: 40GB HDD
-OS: Ubuntu 14.04 (nic nie stoi na przeszkodzie by użyc innego systemu operacyjnego)
+- Nazwa: openwhisk-serwer
+- Rdzenie: 1
+- Pamięć RAM: 2GB (Minimalna ilość RAMu na jakiej udało mi się pomyślnie uruchomić wszystkie komponenty OpenWhisk'a)
+- Dysk: 40GB HDD
+- OS: Ubuntu 14.04 (nic nie stoi na przeszkodzie by użyc innego systemu operacyjnego)
 
 Jako że był to mój pierwszy serwer na e24cloud, musiałem również wygenerować parę kluczy ssh.
 
