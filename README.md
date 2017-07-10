@@ -80,7 +80,7 @@ Jako że był to mój pierwszy serwer na e24cloud, musiałem również wygenerow
 
 Po kilku sekundach od utworzenia serwera otrzymałem mailowo informację o tym, że mój serwer jest już gotowy do użytku, także nie pozostało nic innego niż zalogować się na niego i przystąpić do instalacji OpenWhisk'a.
 
-### Instalacja OpenWhisk
+### Przygotowanie środowiska dla OpenWhisk'a
 
 W pierwszym kroku, instalujemy `git`, który będzie nam potrzebny do sklonowania repozytorium z Apache OpenWhisk.
 ```
