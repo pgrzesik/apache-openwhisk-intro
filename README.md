@@ -141,3 +141,123 @@ Powyższa komenda jest czasochłonna (przy pierwszej pomyślnej próbie zajęło
 W przypadku maszyny z ilością RAMu mniejszą niż 2 GB nie udawało się pomyślnie ukończyć procesu budowania.
 
 
+#### Deploy
+
+Po zakończonym procesie budowania, przechodzimy do deploymentu OpenWhisk'a.
+
+W pierwszym kroku deploymentu, postawiony zostanie kontener z CouchDB, przy pomocy komendy:
+
+```
+cd openwhisk/ansible
+ansible-playbook couchdb.yml
+```
+
+Po ukończeniu procesu, przy pomocy komendy `docker ps` możemy potwierdzić, że kontener został uruchomiony poprawnie.
+```
+docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+6473a644f862        couchdb:1.6         "tini -- /docker-entr"   33 seconds ago      Up 32 seconds       0.0.0.0:5984->5984/tcp   couchdb
+```
+
+Następnym krokiem, który musi zostać wykonany zawsze po nowym deploymencie CouchDB jest wykonanie inicjalizacji bazy danych *_subjects.
+
+```
+cd openwhisk/ansible
+ansible-playbook initdb.yml
+```
+
+Poprawnosć wykonania komendy możemy potwierdzić korzystając z API CouchDB:
+
+```
+curl localhost:5984/_all_dbs
+["_replicator","_users","root_ip-193-187-65-75_subjects"]
+```
+
+W odpowiedzi widzimy nowo utworzoną bazę danych `root_ip-193-187-65-75_subjects`.
+
+Następnie, wykonujemy komendę mającą na celu stworzenie/wyczyszczenie baz danych `whisks` i `activations`:
+Operację tę należy wykonać tylko podczas nowego deploymentu, w przeciwnym wypadku stracimy uprzednio stworzone akcje (baza `whisks`) i dane na temat aktywacji (baza `activations`). 
+
+```
+cd openwhisk/ansible
+ansible-playbook wipe.yml
+```
+
+Rezultat możemy zaobserwować korzystając z API CouchDB:
+```
+curl localhost:5984/_all_dbs
+["_replicator","_users","root_ip-193-187-65-75_activations","root_ip-193-187-65-75_subjects","root_ip-193-187-65-75_whisks"]
+```
+
+W odpowiedzi widzimy nowo utworzone bazy danych `root_ip-193-187-65-75_activations` oraz `root_ip-193-187-65-75_whisks`.
+
+Następnym krokiem będzie deployment API Gateway, które pozwoli na wywoływanie akcji za pomocą HTTP API.
+Do tego celu ponownie wykorzystujemy ansible:
+
+```
+cd openwhisk/ansible
+anisble-playbook apigateway.yml
+```
+
+Potwierdzenie pomyślnego deployu gateway'a:
+
+```
+docker ps
+CONTAINER ID        IMAGE                        COMMAND                  CREATED              STATUS              PORTS                                                              NAMES
+b0390aba1e73        openwhisk/apigateway:0.8.2   "/usr/local/bin/dumb-"   About a minute ago   Up About a minute   80/tcp, 8423/tcp, 0.0.0.0:9000->9000/tcp, 0.0.0.0:9001->8080/tcp   apigateway
+28a3797d8bbd        redis:3.2                    "docker-entrypoint.sh"   2 minutes ago        Up 2 minutes        0.0.0.0:6379->6379/tcp                                             redis
+6473a644f862        couchdb:1.6                  "tini -- /docker-entr"   14 minutes ago       Up 14 minutes       0.0.0.0:5984->5984/tcp                                             couchdb
+```
+
+Jak widać powyżej, uruchomione zostały kontenery z Redisem, wykorzystywanym przez API Gateway oraz kontener z API Gateway.
+
+Przedostatnim krokiem będzie deployment samego 'core' OpenWhisk'a:
+
+```
+cd openwhisk/ansible
+ansible-playbook openwhisk.yml
+```
+
+W celu potwierdzenia pomyślnego deployu, ponownie uzywamy komendy `docker ps`:
+
+```
+docker ps
+CONTAINER ID        IMAGE                        COMMAND                  CREATED              STATUS              PORTS                                                                                                                                                  NAMES
+032687e350d4        nginx:1.11                   "nginx -g 'daemon off"   29 seconds ago       Up 27 seconds       0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp, 0.0.0.0:8443->8443/tcp                                                                                       nginx
+fa20cfb8ef70        whisk/nodejs6action:latest   "/bin/sh -c 'node --e"   About a minute ago   Up About a minute                                                                                                                                                          wsk0_6_warmJsContainer_20170710T192207Z
+6f68c77a0d33        whisk/nodejs6action:latest   "/bin/sh -c 'node --e"   About a minute ago   Up About a minute                                                                                                                                                          wsk0_4_warmJsContainer_20170710T192201010Z
+1578b1903ddf        whisk/nodejs6action:latest   "/bin/sh -c 'node --e"   About a minute ago   Up About a minute                                                                                                                                                          wsk0_2_warmJsContainer_20170710T192159093Z
+9da6c002dcf7        whisk/nodejs6action:latest   "/bin/sh -c 'node --e"   About a minute ago   Up About a minute                                                                                                                                                          wsk0_1_warmJsContainer_20170710T192157221Z
+a80a0323b395        whisk/invoker:latest         "/bin/sh -c 'exec /in"   About a minute ago   Up About a minute   0.0.0.0:12001->8080/tcp                                                                                                                                invoker0
+b919f46ab2fb        whisk/controller:latest      "/bin/sh -c 'controll"   2 minutes ago        Up 2 minutes        0.0.0.0:10001->8080/tcp                                                                                                                                controller0
+a45ede624db9        ches/kafka:0.10.2.1          "/start.sh"              2 minutes ago        Up 2 minutes        7203/tcp, 0.0.0.0:9092->9092/tcp                                                                                                                       kafka
+a8d34b033003        zookeeper:3.4                "/docker-entrypoint.s"   4 minutes ago        Up 4 minutes        2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp                                                                                                             zookeeper
+55acf30bbc50        gliderlabs/registrator       "/bin/registrator -ip"   4 minutes ago        Up 4 minutes                                                                                                                                                               registrator
+cb65c996373e        consul:0.7.0                 "docker-entrypoint.sh"   4 minutes ago        Up 4 minutes        0.0.0.0:8300-8302->8300-8302/tcp, 0.0.0.0:8400->8400/tcp, 0.0.0.0:8301-8302->8301-8302/udp, 0.0.0.0:8500->8500/tcp, 0.0.0.0:8600->8600/udp, 8600/tcp   consul
+b0390aba1e73        openwhisk/apigateway:0.8.2   "/usr/local/bin/dumb-"   8 minutes ago        Up 8 minutes        80/tcp, 8423/tcp, 0.0.0.0:9000->9000/tcp, 0.0.0.0:9001->8080/tcp                                                                                       apigateway
+28a3797d8bbd        redis:3.2                    "docker-entrypoint.sh"   9 minutes ago        Up 9 minutes        0.0.0.0:6379->6379/tcp                                                                                                                                 redis
+6473a644f862        couchdb:1.6                  "tini -- /docker-entr"   21 minutes ago       Up 21 minutes       0.0.0.0:5984->5984/tcp                                                                                                                                 couchdb
+```
+
+Jak widzimy powyżej, uruchomiona została znaczna liczba kontenerów, takich jak Nginx, Controller, Invoker, Kafka, Zookeeper, Consul oraz Registrator.
+Oprócz tego uruchomione zostały 4 "gorące" kontenery służące jako środowisko uruchomieniowe dla akcji napisanych w Node.js.
+
+
+Ostatnim krokiem deploymentu jest wykonanie komendy:
+
+```
+cd openwhisk/ansible
+ansible-playbook postdeploy.yml
+```
+
+#### Konfiguracja CLI
+
+TODO
+
+### Tworzenie akcji w OpenWhisk
+
+TODO
+
+### Wywoływanie akcji przez API Gateway
+
+TODO
