@@ -99,5 +99,44 @@ Po pomyślnym sklonowaniu repozytorium, instalujemy potrzebne narzędzia(m.in. D
 
 Podczas wykonywania tego kroku, należy uzbroić się w cierpliwość gdyż może on potrwać od kilku do kilkunastu minut.
 
-### Budowanie OpenWhisk'a
+### Deployment OpenWhisk'a
+
+
+#### Konfiguracja data store (CouchDB)
+
+Na potrzeby prezentacji, jako data store wykorzystany została wykorzystana ulotna instancja CouchDB uruchomiona jako kontener dockerowy.
+Do wygenerowania konfiguracji dla CouchDB wykorzystany został playbook anisble:
+```
+cd openwhisk/ansible
+ansible-playbook setup.yml
+```
+W rezultacie, wygenerowany został plik `db_local.ini`, zawierający credentiale do CouchDB.
+```
+[db_creds]
+db_provider=CouchDB
+db_username=whisk_admin
+db_password=XXXXXXXXX
+db_protocol=http
+db_host=172.17.0.1
+db_port=5984
+```
+
+#### Instalacja prerequisites
+
+Do deploymentu potrzebne nam będą jeszcze narzędzia instalowane przy pomocy:
+```
+cd openwhisk/ansible
+ansible-playbook prereq.yml
+```
+
+#### Budowanie OpenWhisk'a
+
+Po instalacji potrzebnych narzędzi możemy przystąpić do budowania OpenWhisk'a za pomocą `gradle`:
+```
+./openwhisk/gradlew distDocker
+```
+
+Powyższa komenda jest czasochłonna (przy pierwszej pomyślnej próbie zajęło mi to prawie 40 min), więc należy się uzbroić w cierpliwość.
+W przypadku maszyny z ilością RAMu mniejszą niż 2 GB nie udawało się pomyślnie ukończyć procesu budowania.
+
 
