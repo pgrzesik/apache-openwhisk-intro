@@ -82,4 +82,22 @@ Po kilku sekundach od utworzenia serwera otrzymałem mailowo informację o tym, 
 
 ### Instalacja OpenWhisk
 
-TODO 
+W pierwszym kroku, instalujemy `git`, który będzie nam potrzebny do sklonowania repozytorium z Apache OpenWhisk.
+```
+apt-get update && apt-get install -y git
+```
+
+Następnie, klonujemy repozytorium z OpenWhisk'iem do katalogu `openwhisk`.
+```
+git clone https://github.com/apache/incubator-openwhisk.git openwhisk
+```
+
+Po pomyślnym sklonowaniu repozytorium, instalujemy potrzebne narzędzia(m.in. Docker, Ansible, Java8, Scala) za pomocą komendy:
+```
+./openwhisk/tools/ubuntu-setup/all.sh
+```
+
+Podczas wykonywania tego kroku, należy uzbroić się w cierpliwość gdyż może on potrwać od kilku do kilkunastu minut.
+
+### Budowanie OpenWhisk'a
+
