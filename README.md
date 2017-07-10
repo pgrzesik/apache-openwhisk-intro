@@ -71,7 +71,6 @@ Możliwe jest również utrzymywanie "gorących" kontenerów, które pozwalają
 
 Do przetestowania OpenWhisk'a w akcji, wykorzystałem serwer na e24cloud o następujących parametrach:
 
-- Nazwa: openwhisk-serwer
 - Rdzenie: 1
 - Pamięć RAM: 2GB (Minimalna ilość RAMu na jakiej udało mi się pomyślnie uruchomić wszystkie komponenty OpenWhisk'a)
 - Dysk: 40GB HDD
