@@ -133,7 +133,8 @@ ansible-playbook prereq.yml
 
 Po instalacji potrzebnych narzędzi możemy przystąpić do budowania OpenWhisk'a za pomocą `gradle`:
 ```
-./openwhisk/gradlew distDocker
+cd openwhisk
+./gradlew distDocker
 ```
 
 Powyższa komenda jest czasochłonna (przy pierwszej pomyślnej próbie zajęło mi to prawie 40 min), więc należy się uzbroić w cierpliwość.
