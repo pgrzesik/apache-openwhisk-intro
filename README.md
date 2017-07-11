@@ -252,11 +252,75 @@ ansible-playbook postdeploy.yml
 
 #### Konfiguracja CLI
 
-TODO
+Po deploymencie, przystępujemy do konfiguracji CLI, za pomocą którego będziemy używać OpenWhisk'a.
+CLI stworzone podczas deploymentu znajduje się pod ścieżką `openwhisk/bin/wsk`.
+Do używania CLI, wymagane jest ustawienie dwóch parametrów:
+- API host - nazwa lub adres IP
+- Authorization Key (nazwa użytkownika i hasło) wykorzystywane do autoryzacji przez API
+ 
+Za pomocą poniższej komendy, ustawiony zostaje API host:
 
-### Tworzenie akcji w OpenWhisk
+```
+./openwhisk/bin/wsk property set --apihost <adres IP>
+```
 
-TODO
+Na potrzeby testu, jako klucz autoryzacyjny, wykorzystany zostanie klucz dla konta `guest`, znajdujący się w katalogu `openwhisk/ansible/files/auth.guest`.
+Za pomocą poniższej komendy ustawiony zostaje klucz autoryzacyjny.
+```
+./openwhisk/bin/wsk property set --auth `cat ./openwhisk/ansible/files/auth.guest`
+```
+
+Property przechowywane są przez OpenWhisk'a pod ścieżką `~/.wskprops`, gdzie możemy zweryfikować, że udało nam się je poprawie ustawić.
+
+### Tworzenie oraz wywoływanie akcji w OpenWhisk
+
+Mając skonfigurowane CLI, możemy przystąpić do stworzenia pierwszej akcji w OpenWhisk. 
+W tym celu, tworzymy pod ścieżką `~/python-example/action.py` plik z kodem Pythonowym:
+
+```python
+def main(args):
+    name = args.get("name", "stranger")
+    greeting = "Hello from OpenWhisk on e24cloud, " + name + "!"
+    print(greeting)
+    return {"greeting": greeting}
+```
+
+Następnie, przy pomocy CLI tworzymy akcję o nazwie `pyaction`:
+
+```
+./openwhisk/bin/wsk -i action create pyaction ./python-example/action.py
+```
+
+W celu przetestowania, wywołujemy stworzoną akcję z poziomu CLI:
+```
+./openwhisk/bin/wsk -i action invoke --result pyaction 
+```
+Rezultat:
+```
+{
+    "greeting": "Hello from OpenWhisk on e24cloud, stranger!"
+}
+```
+
+Wywołanie z przekazaniem parametru do funkcji:
+```
+./openwhisk/bin/wsk -i action invoke --result pyaction --param name Chmuromaniak
+```
+Rezultat:
+```
+{
+    "greeting": "Hello from OpenWhisk on e24cloud, Chmuromaniak!"
+}
+```
+
+Jak widzimy, nasza akcja wykonywana jest poprawnie!
+
+Korzystając z komendy `docker ps`, możemy również zaobserwować, że został utworzony kontener dockerowy, służący jako środowisko uruchomieniowe dla naszej akcji.
+
+```
+CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS              PORTS                                                                                                                                                  NAMES
+53255ce5b309        whisk/python2action:latest   "/bin/bash -c 'cd pyt"   3 minutes ago       Up 3 minutes                                                                                                                                                               wsk0_247_guestpyaction001_20170711T153039406Z
+```
 
 ### Wywoływanie akcji przez API Gateway
 
