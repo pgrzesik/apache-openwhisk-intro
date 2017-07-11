@@ -20,6 +20,8 @@ Główną ideą OpenWhisk'a jest wykonywanie odpowiednich akcji (actions), w od
 Akcje są to bezstanowe funkcje, napisane w języku takim jak Python, Swift, Javascript, mogą być również dowolnym programem spakowanym w kontener Docker'owy.
 Do zdarzeń w wyniku których wywoływane są akcje należeć mogą proste requesty HTTP, zmiany w bazie danych, upload pliku graficznego czy też pojawienie się nowego commitu w repozytorium.
 
+## TODO: opisać triggery i reguły
+
 Zdarzenia te trafiają do odpowiednich triggerów, które następnie na podstawie reguł wywołują odpowiednie akcje. 
 
 ![flow openwhisk](https://github.com/pgrzesik/apache-openwhisk-intro/blob/master/img/flow_openwhisk.png)
@@ -28,6 +30,8 @@ Zdarzenia te trafiają do odpowiednich triggerów, które następnie na podstawi
 ## Elementy architektury Apache OpenWhisk
 
 OpenWhisk do działania wykorzystuje technologie takie jak Nginx, CouchDB, Kafka oraz Docker, przestawione poniżej.
+
+## TODO: Dodać Zookeepera do schematu
 
 ![elementy openwhisk](https://github.com/pgrzesik/apache-openwhisk-intro/blob/master/img/elementy_openwhisk.png)
 
@@ -369,3 +373,9 @@ Rezultat:
 
 Jak widzimy w rezultacie, otrzymana odpowiedź zgadza się z oczekiwaną wartością zwróconą przez przygotowaną akcję.
 
+## TODO (jak starczy czasu) - przykład z użyciem frameworka Serverless
+
+
+### Podsumowanie 
+
+TODO
