@@ -324,4 +324,48 @@ CONTAINER ID        IMAGE                        COMMAND                  CREATE
 
 ### Wywoływanie akcji przez API Gateway
 
-TODO
+Kolejnym punktem będzie dodanie możliwości wykonywania akcji za pomocą API Gateway:
+
+Do tego celu stworzymy nową akcję, tym razem z kodem w Node.js, znajdującym się pod ścieżką `./js-example/action.js`.
+
+```
+function main({name:name='Serverless API on e24cloud'}) {
+  return {payload: `Hello from ${name}`};
+}
+```
+
+Przy pomocy CLI, tworzymy akcję o nazwie `jsaction`:
+
+```
+./openwhisk/bin/wsk -i action create jsaction ./js-example/action.js --web true
+```
+
+Nalezy zwrócić uwagę, że w tym wypadku, akcja została stworzona z flagą `--web true`.
+
+Nastepnie, korzystając z `wsk`, tworzymy API dla naszej akcji:
+
+```
+./openwhisk/bin/wsk -i api create /hello /world get jsaction --response-type json
+```
+
+W rezultacie powinniśmy ujrzeć URL do naszej akcji:
+```
+ok: created API /hello/world GET for action /_/jsaction
+http://172.17.0.1:9001/api/23bc46b1-71f6-4ed5-8c54-816aa4f8c502/hello/world
+```
+
+Aby przetestować czy wywoływanie akcji poprzez API Gateway działa, wykonujemy odpowiedni request:
+
+```
+curl http://172.17.0.1:9001/api/23bc46b1-71f6-4ed5-8c54-816aa4f8c502/hello/world
+```
+
+Rezultat:
+```
+{
+  "payload": "Hello from Serverless API on e24cloud"
+}
+```
+
+Jak widzimy w rezultacie, otrzymana odpowiedź zgadza się z oczekiwaną wartością zwróconą przez przygotowaną akcję.
+
