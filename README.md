@@ -31,8 +31,6 @@ Zdarzenia te trafiają do odpowiednich triggerów, które następnie na podstawi
 
 OpenWhisk do działania wykorzystuje technologie takie jak Nginx, CouchDB, Kafka oraz Docker, przestawione poniżej.
 
-**TODO: Dodać Zookeepera do schematu**
-
 ![elementy openwhisk](https://github.com/pgrzesik/apache-openwhisk-intro/blob/master/img/elementy_openwhisk.png)
 
 ### Nginx
