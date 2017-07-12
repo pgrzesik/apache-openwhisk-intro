@@ -377,9 +377,8 @@ Rezultat:
 
 Jak widzimy w rezultacie, otrzymana odpowiedź zgadza się z oczekiwaną wartością zwróconą przez przygotowaną akcję.
 
-**TODO (jak starczy czasu) - przykład z użyciem frameworka Serverless**
-
 
 ### Podsumowanie 
 
-TODO
+Jak widać powyżej, w stosunkowo prosty sposób udało nam się skonfigurować testowe środowisko do eksperymentów z architekturą Serverless/FaaS na chmurze e24cloud.
+Oczywiście, nie jest to rozwiązanie produkcyjne z racji na ulotną bazę danych, użycie tylko jednej instancji czy brak HTTPS, jednak daje nam ono możliwość zapoznania się z tym jak w praktyce działa Apache OpenWhisk(podobnie działają inne rozwiązania FaaS takie jak AWS Lambda czy Azure Functions).
