@@ -20,12 +20,18 @@ Główną ideą OpenWhisk'a jest wykonywanie odpowiednich akcji (actions), w od
 Akcje są to bezstanowe funkcje, napisane w języku takim jak Python, Swift, Javascript, mogą być również dowolnym programem spakowanym w kontener Docker'owy.
 Do zdarzeń w wyniku których wywoływane są akcje należeć mogą proste requesty HTTP, zmiany w bazie danych, upload pliku graficznego czy też pojawienie się nowego commitu w repozytorium.
 
-**TODO: opisać triggery i reguły**
+Triggery są to kanały dla konkretnej grupy zdarzeń, jako przykłady wymienić można:
 
-Zdarzenia te trafiają do odpowiednich triggerów, które następnie na podstawie reguł wywołują odpowiednie akcje. 
+- Trigger dla uploadu dokumentów na serwer
+- Trigger dla przychodzących maili
+- Trigger dla requestów HTTP
+
+Mogą one zostać wywołane ręcznie lub pośrednio przy pomocy odpowiedniego zdarzenia.
+
+Reguły służą do powiązania triggerów z akcjami. Za każdym razem gdy trigger zostaje uruchomiony, wywołane zostają powiązane z nim akcje.
+W ten sposób pojedynczy trigger może służyc do wykonania jednej lub więcej akcji.
 
 ![flow openwhisk](https://github.com/pgrzesik/apache-openwhisk-intro/blob/master/img/flow_openwhisk.png)
-
 
 ## Elementy architektury Apache OpenWhisk
 
